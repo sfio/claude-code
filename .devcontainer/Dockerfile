@@ -5,6 +5,7 @@ ARG TZ
 ENV TZ="$TZ"
 
 ARG CLAUDE_CODE_VERSION=latest
+ARG SANDBOX_RUNTIME_VERSION=latest
 
 # Install basic development tools and iptables/ipset
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -29,6 +30,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   curl \
   locales \
   ca-certificates \
+  bubblewrap socat \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # locale
@@ -96,7 +98,8 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
 # Install Claude
 #RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
 RUN echo 'eval "$(mise activate zsh)"' >> ~/.zshrc && \
-    mise use -g claude@${CLAUDE_CODE_VERSION}
+    mise use -g claude@${CLAUDE_CODE_VERSION} && \
+    npm install -g @anthropic-ai/sandbox-runtime@${SANDBOX_RUNTIME_VERSION}
 
 
 # Copy and set up firewall script
