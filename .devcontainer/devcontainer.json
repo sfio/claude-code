@@ -1,12 +1,13 @@
 {
-  "name": "Claude Code Sandbox",
+  "name": "${localWorkspaceFolderBasename} (Claude Code Sandbox)",
   "build": {
     "dockerfile": "Dockerfile",
+    "options": ["--progress=plain"],
     "args": {
-      "TZ": "${localEnv:TZ:America/Los_Angeles}",
+      "TZ": "${localEnv:TZ:Asia/Tokyo}",
       "CLAUDE_CODE_VERSION": "latest",
-      "GIT_DELTA_VERSION": "0.18.2",
-      "ZSH_IN_DOCKER_VERSION": "1.2.0"
+      "GIT_DELTA_VERSION": "0.19.2",
+      "ZSH_IN_DOCKER_VERSION": "1.2.1"
     }
   },
   "runArgs": [
@@ -19,7 +20,11 @@
         "anthropic.claude-code",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "MS-CEINTL.vscode-language-pack-ja",
+        "EditorConfig.EditorConfig",
+        "fill-labs.dependi",
+        "mhutchie.git-graph"
       ],
       "settings": {
         "editor.formatOnSave": true,
