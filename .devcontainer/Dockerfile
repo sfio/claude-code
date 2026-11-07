@@ -1,4 +1,5 @@
-FROM node:20
+ARG NODE_TAG=24-trixie
+FROM node:${NODE_TAG}
 
 ARG TZ
 ENV TZ="$TZ"
@@ -26,7 +27,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   nano \
   vim \
   curl \
+  locales \
+  ca-certificates \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# locale
+RUN locale-gen en_US.UTF-8 && \
+    localedef -f UTF-8 -i en_US en_US.UTF-8
 
 # mise
 RUN install -dm 755 /etc/apt/keyrings && \
