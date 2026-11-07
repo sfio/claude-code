@@ -25,7 +25,15 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   jq \
   nano \
   vim \
+  curl \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# mise
+RUN install -dm 755 /etc/apt/keyrings && \
+  (curl -fSs https://mise.jdx.dev/gpg-key.pub | tee /etc/apt/keyrings/mise-archive-keyring.asc 1> /dev/null) && \
+  (echo "deb [signed-by=/etc/apt/keyrings/mise-archive-keyring.asc] https://mise.jdx.dev/deb stable main" | tee /etc/apt/sources.list.d/mise.list) && \
+  apt update -y && apt install -y --no-install-recommends mise && \
+  apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Ensure default node user has access to /usr/local/share
 RUN mkdir -p /usr/local/share/npm-global && \
@@ -79,7 +87,9 @@ RUN sh -c "$(wget -O- https://github.com/deluan/zsh-in-docker/releases/download/
   -x
 
 # Install Claude
-RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+#RUN npm install -g @anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}
+RUN echo 'eval "$(mise activate zsh)"' >> ~/.zshrc && \
+    mise use -g claude@${CLAUDE_CODE_VERSION}
 
 
 # Copy and set up firewall script
